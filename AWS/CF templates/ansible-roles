@@ -1,0 +1,19 @@
+# roles are the next level of abstraction after playbooks.
+# If a system (or group of hosts) need to play the role of webserver-with-apache, we can create
+# a role 'apache-webserver'. Creating this role will result in the creation of a directory tree 
+# with handlers, templates, tasks and variables. This tree contains everything necessary to fulfill
+# the role of 'apache-webserver'.
+# We can repeat this for all other 'system purposes'. When we run a playbook, we can simply refer 
+# to the roles for that particular host. By well organizing the system roles, we reuse code effectively.
+
+    mkdir roles && cd roles
+    ansible-galaxy init apache2      # creates files, handlers, meta, templates, tasks and vars directories
+
+Our playbook yaml file (webserver.yml) looks like
+    ---
+    - hosts: webservers
+      roles:
+        - role: apache2
+
+and execute
+    ansible-playbook webserver.yml

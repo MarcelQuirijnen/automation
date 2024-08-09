@@ -1,0 +1,95 @@
+{
+    "Outputs": {
+        "InstanceAccess": {
+            "Description": "SSH command to access the instance",
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "ssh -i ~/.ssh/id-rsa ec2-user@",
+                        {
+                            "Fn::GetAtt": [
+                                "Webserver",
+                                "PublicDnsName"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        },
+        "WebUrl": {
+            "Description": "URL of the webserver",
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "http://",
+                        {
+                            "Fn::GetAtt": [
+                                "Webserver",
+                                "PublicDnsName"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        }
+    },
+    "Parameters": {
+        "KeyName": {
+            "Description": "SSH keypair name",
+            "Type": "String"
+        }
+    },
+    "Resources": {
+        "Staqsgx": {
+            "Properties": {
+                "GroupDescription": "Allow access through ports 80 and 22 to the server",
+                "SecurityGroupIngress": [
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "FromPort": 22,
+                        "IpProtocol": "tcp",
+                        "ToPort": 22
+                    },
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "FromPort": 80,
+                        "IpProtocol": "http",
+                        "ToPort": 80
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::SecurityGroup"
+        },
+        "Webserver": {
+            "Properties": {
+                "ImageId": "ami-965e6bf3",
+                "InstanceType": "t2.micro",
+                "KeyName": {
+                    "Ref": "KeyName"
+                },
+                "SecurityGroups": [
+                    {
+                        "Ref": "Staqsgx"
+                    }
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "\n",
+                            [
+                                "#!/bin/bash",
+                                "sudo apt-get install apache2",
+                                "sudo echo '<html><head><title>Welcome</title></head><body><h1>DevOps on AWS</h1></body></html>' > /var/www/html/index.html",
+                                "sudo update-rc.d apache2 enable",
+                                "sudo service apache2 start"
+                            ]
+                        ]
+                    }
+                }
+            },
+            "Type": "AWS::EC2::Instance"
+        }
+    }
+}

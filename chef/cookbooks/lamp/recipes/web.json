@@ -1,0 +1,4 @@
+{
+  "mysql": {"server_root_password": "mypassword"},
+  "run_list": [ "recipe[setup]" ]
+}

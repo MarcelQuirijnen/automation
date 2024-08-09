@@ -1,0 +1,3 @@
+cd /etc/ansible && sudo wget https://raw.githubusercontent.com/ansible/ansible/devel/contrib/inventory/ec2.py
+cd /etc/ansible && sudo wget https://raw.githubusercontent.com/ansible/ansible/devel/contrib/inventory/ec2.ini
+cd /etc/ansible && chmod u+x ec2.py

@@ -1,0 +1,13 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Install Apache2 webserver
+      apt-get:
+        name: apache2
+        state: present
+    - name: Ensure Apache starts at reboot
+      service:
+        name: apache2
+        state: started
+        enabled: true

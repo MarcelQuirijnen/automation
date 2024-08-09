@@ -1,0 +1,45 @@
+# ! It is advised to not use ANSIBLE_HOSTS anymore (deprecation warning)!
+# ! Instead use /etc/ansible/ansible.cfg !
+# I use ANSIBLE_HOSTS for education purposes only (for now)
+
+# The ansible host file is dynamicly 'created' each time ansible needs them
+#   ANSIBLE_HOSTS=$PWD/ec2.py
+# the result will be something like
+# {
+#    "_meta": {
+#        "hostvars": {
+#            "52.202.98.176": {
+#                ...
+#                "ec2_client_token": "",
+#                ...
+#            }
+#        }
+#    },
+#    "ami_e676990e": [
+#        "52.202.98.176"
+#    ],
+#    "ec2": [
+#        "52.202.98.176"
+#    ],
+#    ...
+# }
+# The below cmdline will 'ping' each host (hostvars) in that list (all)
+
+ansible --private-key ~/.ssh/id_rsa --user=ec2-user -m ping all
+
+# The result looks like
+#    52.202.98.176 | SUCCESS => {
+#        "changed": false,
+#        "failed": false,
+#        "ping": "pong"
+#    }
+
+# Execute an arbitrary cmd on a hostlist :
+ansible --private-key ~/.ssh/id_rsa --user=ec2-user -a "df -h"
+
+Which results in something like this:
+#    52.202.98.176 | SUCCESS | rc=0 >>
+#        Filesystem   Size  Used Avail Use% Mounted on
+#        udev         7.8G     0  7.8G   0% /dev
+#        tmpfs        1.6G   67M  1.5G   5% /run
+#    }

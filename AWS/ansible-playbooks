@@ -1,0 +1,13 @@
+# to install apache2 on all our ec2 instances (Ubuntu):
+    ansible-playbook aws-lamp-playbook.yml
+
+# result:
+PLAY [all] *****************************
+TASK [Gathering Facts] *****************
+ok: [52.202.98.176]
+TASK [Install Apache2 webserver] *******
+changed: [52.202.98.176]
+TASK [Ensure Apache starts at reboot] **
+changed: [52.202.98.176]
+PLAY RECAP *****************************
+52.202.98.176   : ok=3  changed=2   unreachable=0   failed=0
